@@ -22,6 +22,7 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -48,9 +49,17 @@ func (e *VerifyError) Unwrap() error { return e.cause }
 
 func (cfg moduleConfig) getReverseProxyDirectorFunc() func(*http.Request) {
 	return func(r *http.Request) {
-		vs := r.URL.Query()
-		vs["module"] = vs["module"][1:]
-		r.URL.RawQuery = vs.Encode()
+		q := url.Values{}
+		firstParam := true
+		for k, v := range cfg.HTTP.Params {
+			if firstParam {
+				q.Set(k, v)
+				firstParam = false
+			} else {
+				q.Add(k, v)
+			}
+		}
+		r.URL.RawQuery = q.Encode()
 
 		for k, v := range cfg.HTTP.Headers {
 			r.Header.Add(k, v)

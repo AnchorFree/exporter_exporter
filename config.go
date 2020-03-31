@@ -57,6 +57,7 @@ type httpConfig struct {
 	TLSCACertFile         *string                `yaml:"tls_ca_cert_file"`         // no default
 	Port                  int                    `yaml:"port"`                     // no default
 	Path                  string                 `yaml:"path"`                     // /metrics
+	Params                map[string]string      `yaml:"params"`                   // no default
 	Scheme                string                 `yaml:"scheme"`                   // http
 	Address               string                 `yaml:"address"`                  // 127.0.0.1
 	Headers               map[string]string      `yaml:"headers"`                  // no default
